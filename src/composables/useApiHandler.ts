@@ -8,14 +8,14 @@ import type { NormalizedError } from '@/services/types'
 export function useApiHandler<
   TPayload,
   TResponse extends { status?: string; message: string | null }
->(action: (payload: TPayload) => Promise<TResponse>) {
+>(action: (payload?: TPayload) => Promise<TResponse>) {
   const loading = ref(false)
   const status = ref<string | null>(null)
   const message = ref<string | null>(null)
   const error = ref<string | null>(null)
   const fieldErrors = ref<Record<string, string[]> | null>(null)
 
-  async function execute(payload: TPayload): Promise<TResponse | null> {
+  async function execute(payload?: TPayload): Promise<TResponse | null> {
     loading.value = true
     error.value = null
     fieldErrors.value = null

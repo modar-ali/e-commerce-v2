@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import { useAuthStore } from '@/features/auth/store.ts/authStore'
+import { useAuthStore } from '@/features/auth/store/authStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +47,18 @@ const router = createRouter({
       name: 'ForgotPassword',
       component: () => import('../views/ForgotPassword.vue'),
       meta: { layout: 'none', requiresAuth: true },
+    },
+    {
+      path: '/offers',
+      name: 'Offers',
+      component: () => import('../views/OffersView.vue'),
+      meta: { layout: 'default' },
+    },
+    {
+      path: '/product/:id',
+      name: 'ProductOverview',
+      component: () => import('../views/ProductOverviewView.vue'),
+      meta: { layout: 'default' },
     },
   ],
 })

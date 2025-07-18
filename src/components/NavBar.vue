@@ -784,32 +784,23 @@
       </div>
     </div>
   </nav>
+  <Teleport to="body"><Spinner v-if="loading" /></Teleport>
 </template>
 
 <script setup lang="ts">
 import DarkModeSwitcher from './DarkModeSwitcher.vue'
-import { useAuthStore } from '@/features/auth/store.ts/authStore'
-import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { useAuthStore } from '@/features/auth/store/authStore'
+import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
+import { useApiHandler } from '@/composables/useApiHandler'
+import Spinner from './Spinner.vue'
 
 const authStore = useAuthStore()
-const router = useRouter()
 
-const loading = ref(false)
-const logoutError = ref<string | null>(null)
+const { loading, execute } = useApiHandler(authStore.logout)
 
 async function doLogout() {
-  loading.value = true
-  logoutError.value = null
-
-  try {
-    const { status, message } = await authStore.logout()
-  } catch (err: any) {
-    logoutError.value = err.message || 'Logout failed, Please try again.'
-  } finally {
-    loading.value = false
-  }
+  await execute()
 }
 
 onMounted(() => initFlowbite())

@@ -41,6 +41,14 @@
                 placeholder="••••••••"
                 v-model="form.newPassword"
               />
+              <p
+                v-if="fieldErrors?.new_password"
+                class="mt-2 text-sm text-red-600 dark:text-red-500"
+                v-for="err of fieldErrors?.new_password"
+                :key="err"
+              >
+                {{ err }}
+              </p>
             </div>
             <div>
               <label
@@ -56,14 +64,22 @@
                 placeholder="••••••••"
                 v-model="form.confirmNewPassword"
               />
+              <p
+                v-if="fieldErrors?.new_passwrod_confirmation"
+                class="mt-2 text-sm text-red-600 dark:text-red-500"
+                v-for="err of fieldErrors?.new_passwrod_confirmation"
+                :key="err"
+              >
+                {{ err }}
+              </p>
             </div>
             <button
-              :disabled="loading"
+              :disabled="forgotLoading"
               type="submit"
               class="w-full inline-flex cursor-pointer items-center justify-center text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
               <svg
-                v-if="loading"
+                v-if="forgotLoading"
                 aria-hidden="true"
                 role="status"
                 class="inline w-4 h-4 me-3 text-white animate-spin"
@@ -81,7 +97,7 @@
                 />
               </svg>
               <span>{{
-                loading ? 'Changing password…' : 'Change password'
+                forgotLoading ? 'Changing password…' : 'Change password'
               }}</span>
             </button>
           </form>
@@ -89,62 +105,56 @@
       </div>
     </div>
     <VerificationModal
-      :status="forgotPasswordStatus"
+      :status="forgotStatus"
       modalId="verify-reset-code-modal"
       title="Verify password reset code"
       :onVerify="verifyResetPasswordWrapper"
       :onResendCode="resendPasswordResetCodeWrapper"
       @submit-code="assignCode"
     />
-    <Alert :status="resetStatus" :duration="5000">{{ resetError }}</Alert>
+    <Teleport to="body"
+      ><Alert
+        :status="forgotStatus"
+        :error="forgotError"
+        :duration="5000"
+      ></Alert
+    ></Teleport>
+    <Teleport to="body"
+      ><Alert :status="resetStatus" :error="resetError" :duration="5000"></Alert
+    ></Teleport>
   </section>
 </template>
 
 <script setup lang="ts">
 import VerificationModal from '@/features/auth/components/VerificationModal.vue'
 import { onMounted, ref } from 'vue'
-import { useAuthStore } from '@/features/auth/store.ts/authStore'
+import { useAuthStore } from '@/features/auth/store/authStore'
 import { useRouter } from 'vue-router'
 import Alert from '@/components/Alert.vue'
+import { useApiHandler } from '@/composables/useApiHandler'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-const forgotPasswordError = ref<string | null>(null)
-const forgotPasswordStatus = ref('')
-const loading = ref(false)
+const {
+  loading: forgotLoading,
+  status: forgotStatus,
+  message: forgotMessage,
+  error: forgotError,
+  execute: doForgetPassword,
+} = useApiHandler(authStore.forgotPassword)
 
-async function doForgetPassword() {
-  loading.value = true
-  forgotPasswordError.value = null
-
-  try {
-    const { status, message } = await authStore.forgotPassword({
-      email: authStore.user!.email,
-    })
-
-    forgotPasswordStatus.value = status
-
-    if (status !== 'success') {
-      forgotPasswordError.value = message
-    }
-  } catch (err: any) {
-    forgotPasswordError.value =
-      err.message || 'Request failed, Please try again.'
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => {
-  doForgetPassword()
+onMounted(async () => {
+  await doForgetPassword({ email: authStore.user!.email })
 })
 
-const verifyResetPasswordWrapper = (code: string) =>
-  authStore.verifyResetPassword({ code, email: authStore.user!.email })
+const verifyResetPasswordWrapper = (payload?: {
+  code: string
+  email: string
+}) => authStore.verifyResetPassword(payload)
 
-const resendPasswordResetCodeWrapper = () =>
-  authStore.resendPasswordResetCode({ email: authStore.user!.email })
+const resendPasswordResetCodeWrapper = (payload?: { email: string }) =>
+  authStore.resendPasswordResetCode(payload)
 
 const code = ref('')
 
@@ -152,35 +162,29 @@ function assignCode(c: string) {
   code.value = c
 }
 
-const resetError = ref<string | null>(null)
-const resetStatus = ref('')
-
 const form = ref({
   newPassword: '',
   confirmNewPassword: '',
 })
 
+const {
+  loading: resetLoading,
+  status: resetStatus,
+  message: resetMessage,
+  error: resetError,
+  fieldErrors,
+  execute: resetPassword,
+} = useApiHandler(authStore.resetPassword)
+
 async function doResetPassword() {
-  loading.value = true
-  resetError.value = null
-
-  try {
-    const { status } = await authStore.resetPassword({
-      email: authStore.user!.email,
-      code: code.value,
-      new_password: form.value.newPassword,
-      new_passwrod_confirmation: form.value.confirmNewPassword,
-    })
-
-    resetStatus.value = status
-
-    if (status === 'success') {
-      router.push({ name: 'Login' })
-    }
-  } catch (err: any) {
-    resetError.value = err.message || 'Login failed, Please try again.'
-  } finally {
-    loading.value = false
+  const response = await resetPassword({
+    email: authStore.user!.email,
+    code: code.value,
+    new_password: form.value.newPassword,
+    new_passwrod_confirmation: form.value.confirmNewPassword,
+  })
+  if (response && response.status === 'success') {
+    router.push({ name: 'Login' })
   }
 }
 </script>

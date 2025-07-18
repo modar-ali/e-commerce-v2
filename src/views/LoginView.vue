@@ -129,13 +129,15 @@
         </div>
       </div>
     </div>
-    <Alert :status="status" :error="error" :duration="5000"></Alert>
+    <Teleport to="body"
+      ><Alert :status="status" :error="error" :duration="5000"></Alert
+    ></Teleport>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '@/features/auth/store.ts/authStore'
+import { useAuthStore } from '@/features/auth/store/authStore'
 import { useRouter } from 'vue-router'
 import Alert from '@/components/Alert.vue'
 import { useApiHandler } from '@/composables/useApiHandler'
@@ -148,7 +150,7 @@ const form = ref({
   password: '',
 })
 
-const { loading, status, message, error, fieldErrors, execute } = useApiHandler(
+const { loading, status, error, fieldErrors, execute } = useApiHandler(
   authStore.login
 )
 

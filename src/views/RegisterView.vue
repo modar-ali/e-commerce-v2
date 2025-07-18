@@ -41,6 +41,14 @@
                   placeholder="John"
                   v-model.trim="form.first_name"
                 />
+                <p
+                  v-if="fieldErrors?.first_name"
+                  class="mt-2 text-sm text-red-600 dark:text-red-500"
+                  v-for="err of fieldErrors?.first_name"
+                  :key="err"
+                >
+                  {{ err }}
+                </p>
               </div>
               <div class="w-full">
                 <label
@@ -56,6 +64,14 @@
                   placeholder="Doe"
                   v-model.trim="form.last_name"
                 />
+                <p
+                  v-if="fieldErrors?.last_name"
+                  class="mt-2 text-sm text-red-600 dark:text-red-500"
+                  v-for="err of fieldErrors?.last_name"
+                  :key="err"
+                >
+                  {{ err }}
+                </p>
               </div>
             </div>
             <div>
@@ -72,6 +88,14 @@
                 placeholder="name@company.com"
                 v-model.trim="form.email"
               />
+              <p
+                v-if="fieldErrors?.email"
+                class="mt-2 text-sm text-red-600 dark:text-red-500"
+                v-for="err of fieldErrors?.email"
+                :key="err"
+              >
+                {{ err }}
+              </p>
             </div>
             <div>
               <label
@@ -87,6 +111,14 @@
                 placeholder="••••••••"
                 v-model.trim="form.password"
               />
+              <p
+                v-if="fieldErrors?.password"
+                class="mt-2 text-sm text-red-600 dark:text-red-500"
+                v-for="err of fieldErrors?.password"
+                :key="err"
+              >
+                {{ err }}
+              </p>
             </div>
             <div>
               <label
@@ -102,6 +134,14 @@
                 placeholder="••••••••"
                 v-model.trim="form.password_confirmation"
               />
+              <p
+                v-if="fieldErrors?.password_confirmation"
+                class="mt-2 text-sm text-red-600 dark:text-red-500"
+                v-for="err of fieldErrors?.password_confirmation"
+                :key="err"
+              >
+                {{ err }}
+              </p>
             </div>
             <div class="flex items-start">
               <div class="flex items-center h-5">
@@ -161,30 +201,27 @@
       </div>
     </div>
     <VerificationModal
-      :status="registerStatus"
+      :status="status"
       modalId="verify-email-modal"
       title="Verify your email"
       :onVerify="verifyEmailWrapper"
       :onResendCode="resendVerificationCodeWrapper"
       push-to="Home"
     />
-    <Alert :error="registerError" :duration="5000">{{ registerError }}</Alert>
+    <Teleport to="body"
+      ><Alert :status="status" :error="error" :duration="5000"></Alert
+    ></Teleport>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '@/features/auth/store.ts/authStore'
+import { useAuthStore } from '@/features/auth/store/authStore'
 import VerificationModal from '@/features/auth/components/VerificationModal.vue'
 import Alert from '@/components/Alert.vue'
-import type { NormalizedError } from '@/services/types'
+import { useApiHandler } from '@/composables/useApiHandler'
 
 const authStore = useAuthStore()
-
-const loading = ref(false)
-const registerError = ref<string | null>(null)
-const registerStatus = ref<string | null>(null)
-const fieldErrors = ref<Record<string, string[]> | null>(null)
 
 const form = ref({
   first_name: '',
@@ -194,34 +231,19 @@ const form = ref({
   password_confirmation: '',
 })
 
-const doRegister = async () => {
-  loading.value = true
-  registerError.value = null
+const { loading, status, message, error, fieldErrors, execute } = useApiHandler(
+  authStore.register
+)
 
-  try {
-    const { status } = await authStore.register(form.value)
-    registerStatus.value = status
-  } catch (err: any) {
-    if (err && typeof err === 'object' && 'status' in err) {
-      const e = err as NormalizedError
-      if (e.status === 422 && e.errors) {
-        fieldErrors.value = e.errors
-      } else {
-        registerError.value = e.message
-      }
-    } else {
-      registerError.value = 'An error occurred. Please try again.'
-    }
-  } finally {
-    loading.value = false
-  }
+async function doRegister() {
+  await execute(form.value)
 }
 
-const verifyEmailWrapper = (code: string) =>
-  authStore.verifyEmail({ code, email: authStore.user!.email })
+const verifyEmailWrapper = (payload?: { code: string; email: string }) =>
+  authStore.verifyEmail(payload)
 
-const resendVerificationCodeWrapper = () =>
-  authStore.resendVerificationCode({ email: authStore.user!.email })
+const resendVerificationCodeWrapper = (payload?: { email: string }) =>
+  authStore.resendVerificationCode(payload)
 </script>
 
 <style scoped></style>

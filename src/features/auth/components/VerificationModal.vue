@@ -114,39 +114,94 @@
             <button
               @click="doVerify"
               type="button"
-              class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="w-32 inline-flex cursor-pointer items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              verify
+              <svg
+                v-if="verifyLoading"
+                :disabled="verifyLoading"
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-white animate-spin"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="#E5E7EB"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>{{ verifyLoading ? 'Verifing…' : 'Verify' }}</span>
             </button>
             <button
               @click="doResendCode"
+              :disabled="resendLoading"
               type="button"
-              class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="w-32 inline-flex cursor-pointer items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Resend code
+              <svg
+                v-if="resendLoading"
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-white animate-spin"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="#E5E7EB"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>{{
+                resendLoading ? 'Resending code…' : 'Resend code'
+              }}</span>
             </button>
           </div>
         </div>
       </div>
     </div>
-    <Alert :status="verifyStatus" :duration="5000">{{ verifyError }}</Alert>
-    <Alert :status="resendStatus" :duration="5000">{{ resendError }}</Alert>
+    <Teleport to="body"
+      ><Alert
+        :status="verifyStatus"
+        :error="verifyError"
+        :duration="5000"
+      ></Alert
+    ></Teleport>
+    <Teleport to="body"
+      ><Alert
+        :status="resendStatus"
+        :error="resendError"
+        :duration="5000"
+      ></Alert
+    ></Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Modal } from 'flowbite'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { initPinCodeFocusHandler } from '@/services/flowbite_logic/initPinCodeFocusHandler'
+import { useAuthStore } from '../store/authStore'
 import { useRouter } from 'vue-router'
 import Alert from '@/components/Alert.vue'
+import type { AuthResponse } from '../types'
+import { useApiHandler } from '@/composables/useApiHandler'
 
 const { status, modalId, title, onVerify, onResendCode, pushTo } = defineProps<{
   status: string | null
   modalId: string
   title: string
-  onVerify: (code: string) => Promise<{ status: string; message: string }>
-  onResendCode: () => Promise<{ status: string; message: string }>
+  onVerify: (payload?: { code: string; email: string }) => Promise<AuthResponse>
+  onResendCode: () => Promise<AuthResponse>
   pushTo?: string
 }>()
 
@@ -168,11 +223,17 @@ onMounted(() => {
   initPinCodeFocusHandler()
 })
 
-const router = useRouter()
+watch(
+  () => status,
+  (newStatus) => {
+    if (newStatus === 'success' && modal) {
+      modal.show()
+    }
+  }
+)
 
-const loading = ref(false)
-const verifyError = ref<string | null>(null)
-const verifyStatus = ref('')
+const authStore = useAuthStore()
+const router = useRouter()
 
 const digit1 = ref('')
 const digit2 = ref('')
@@ -192,44 +253,43 @@ const code = computed(() =>
   ].join('')
 )
 
-const doVerify = async () => {
-  if (code.value.length < 6) {
-    verifyError.value = 'Please enter all 6 digits'
-    return
-  }
+const {
+  loading: verifyLoading,
+  status: verifyStatus,
+  message: verifyMessage,
+  error: verifyError,
+  execute: verify,
+} = useApiHandler(onVerify)
 
-  loading.value = true
-  verifyError.value = null
+async function doVerify() {
+  // if (code.value.length < 6) {
+  //   verifyError.value = 'Please enter all 6 digits'
+  //   return
+  // }
 
-  try {
-    const { status, message } = await onVerify(code.value)
-
-    verifyStatus.value = status
-
-    if (status === 'success') {
-      emit('submitCode', code.value)
-      modal?.hide()
-      router.push({ name: pushTo })
-    } else {
-      verifyError.value = message
-    }
-  } catch (err: any) {
-    verifyError.value = err.message || 'Verification failed, Please try again.'
-  } finally {
-    loading.value = false
+  const response = await verify({
+    code: code.value,
+    email: authStore.user!.email,
+  })
+  if (response && response.status === 'success') {
+    emit('submitCode', code.value)
+    modal?.hide()
+    router.push({ name: pushTo })
   }
 }
 
-const resendStatus = ref('')
-const resendError = ref<string | null>(null)
+const {
+  loading: resendLoading,
+  status: resendStatus,
+  message: resendMessage,
+  error: resendError,
+  execute: resendCode,
+} = useApiHandler(onResendCode)
 
-const doResendCode = async () => {
-  try {
-    const { status } = await onResendCode()
-    resendStatus.value = status
-  } catch (err: any) {
-    resendError.value = err.message || 'Resend code failed, Please try again.'
-  }
+async function doResendCode() {
+  const response = await resendCode({
+    email: authStore.user!.email,
+  })
 }
 </script>
 

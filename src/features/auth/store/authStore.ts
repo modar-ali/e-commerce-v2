@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import api from '@/services/api' // your central axios instance
+import api from '@/services/api'
 import type {
   User,
   RegisterForm,
@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoggedIn = computed(() => !!token.value)
 
   // — actions
-  async function register(payload: RegisterForm) {
+  async function register(payload?: RegisterForm) {
     const response = await api
       .post<RegisterResponse>('/api/auth/register', payload)
       .then((res) => res.data)
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
     return { status: response.status, message: response.message }
   }
 
-  async function login(payload: LoginForm) {
+  async function login(payload?: LoginForm) {
     const response = await api
       .post<LoginResponse>('/api/auth/login', payload)
       .then((res) => res.data)
@@ -48,42 +48,45 @@ export const useAuthStore = defineStore('auth', () => {
     return { status: response.status, message: response.message }
   }
 
-  async function verifyEmail(payload: { code: string; email: string }) {
+  async function verifyEmail(payload?: { code: string; email: string }) {
     const response = await api
       .post<AuthResponse>('/api/auth/verify-user-email', payload)
       .then((res) => res.data)
     return response
   }
 
-  async function resendVerificationCode(payload: { email: string }) {
+  async function resendVerificationCode(payload?: { email: string }) {
     const response = await api
       .post<AuthResponse>('/api/auth/resend-email-verification-code', payload)
       .then((res) => res.data)
     return response
   }
 
-  async function forgotPassword(payload: { email: string }) {
+  async function forgotPassword(payload?: { email: string }) {
     const response = await api
       .post<AuthResponse>('/api/auth/forgot-password', payload)
       .then((res) => res.data)
     return response
   }
 
-  async function verifyResetPassword(payload: { code: string; email: string }) {
+  async function verifyResetPassword(payload?: {
+    code: string
+    email: string
+  }) {
     const response = await api
       .post<AuthResponse>('/api/auth/verify-reset-code', payload)
       .then((res) => res.data)
     return response
   }
 
-  async function resendPasswordResetCode(payload: { email: string }) {
+  async function resendPasswordResetCode(payload?: { email: string }) {
     const response = await api
       .post<AuthResponse>('/api/auth/resend-reset-code', payload)
       .then((res) => res.data)
     return response
   }
 
-  async function resetPassword(payload: {
+  async function resetPassword(payload?: {
     email: string
     code: string
     new_password: string
