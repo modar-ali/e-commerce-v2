@@ -5,6 +5,7 @@ import { useAuthStore } from '@/features/auth/store/authStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => '../views/NotFoundView.vue' },
     {
       path: '/',
       name: 'Home',
@@ -58,6 +59,12 @@ const router = createRouter({
       path: '/product/:id',
       name: 'ProductOverview',
       component: () => import('../views/ProductOverviewView.vue'),
+      meta: { layout: 'default' },
+    },
+    {
+      path: '/products/:product',
+      name: 'SearchProduct',
+      component: () => import('../views/SearchProductView.vue'),
       meta: { layout: 'default' },
     },
   ],

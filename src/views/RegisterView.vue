@@ -146,20 +146,18 @@
             <div class="flex items-start">
               <div class="flex items-center h-5">
                 <input
-                  id="remember"
-                  aria-describedby="remember"
+                  id="notifications"
+                  aria-describedby="notifications"
                   type="checkbox"
                   class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                 />
               </div>
               <div class="ml-3 text-sm">
-                <label for="remember" class="text-gray-500 dark:text-gray-300"
-                  >I accept the
-                  <a
-                    href="#"
-                    class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                    >Terms and Conditions</a
-                  ></label
+                <label
+                  for="notifications"
+                  class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  Subscribe on email</label
                 >
               </div>
             </div>
@@ -229,6 +227,7 @@ const form = ref({
   email: '',
   password: '',
   password_confirmation: '',
+  wants_notifications: false,
 })
 
 const { loading, status, message, error, fieldErrors, execute } = useApiHandler(

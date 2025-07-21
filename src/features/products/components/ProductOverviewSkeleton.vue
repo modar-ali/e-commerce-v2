@@ -42,9 +42,15 @@
         <div
           class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mt-4"
         ></div>
-        <div
-          class="mt-6 w-full sm:w-32 h-10 sm:mt-8 bg-gray-200 rounded-lg dark:bg-gray-700"
-        ></div>
+        <div class="mt-6 w-full sm:w-fit sm:mt-8">
+          <div
+            v-if="authStore.isLoggedIn"
+            class="mb-3 w-36 h-6 sm:mt-8 bg-gray-200 rounded-lg dark:bg-gray-700"
+          ></div>
+          <div
+            class="w-full sm:w-36 h-10 bg-gray-200 rounded-lg dark:bg-gray-700"
+          ></div>
+        </div>
       </div>
       <hr class="my-3 md:my-4 border-gray-200 dark:border-gray-800" />
       <div>
@@ -82,6 +88,10 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from '@/features/auth/store/authStore'
+
+const authStore = useAuthStore()
+</script>
 
 <style scoped></style>

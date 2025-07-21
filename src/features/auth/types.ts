@@ -26,6 +26,7 @@ export interface RegisterForm {
   email: string
   password: string
   password_confirmation: string
+  wants_notifications: boolean
 }
 
 export interface LoginForm {

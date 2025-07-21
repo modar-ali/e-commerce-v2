@@ -8,9 +8,9 @@ export const useTrendyProductsStore = defineStore('trendy', () => {
   const currentPage = ref(1)
   const lastPage = ref(1)
 
-  async function fetchTrendyProducts(page?: number) {
+  async function fetchTrendyProducts(payload?: {page: number}) {
     const response = await api
-      .get<ProductsResponse>(`/api/product/trendy?page=${page}`)
+      .get<ProductsResponse>(`/api/product/trendy?page=${payload!.page}`)
       .then((res) => res.data)
 
     products.value = response.products.data

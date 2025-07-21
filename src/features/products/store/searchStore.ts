@@ -3,14 +3,19 @@ import api from '@/services/api'
 import { ref } from 'vue'
 import type { ProductsResponse, Product } from '../types'
 
-export const useOffersStore = defineStore('offers', () => {
+export const useSearchStore = defineStore('search', () => {
   const products = ref<Product[]>([])
   const currentPage = ref(1)
   const lastPage = ref(1)
 
-  async function fetchOffers(payload?: { page: number }) {
+  async function fetchSearchedProducts(payload?: {
+    product?: string
+    page: number
+  }) {
     const response = await api
-      .get<ProductsResponse>(`/api/product/offers?page=${payload!.page}`)
+      .get<ProductsResponse>(
+        `/api/product/search/${payload!.product}?page=${payload!.page}`
+      )
       .then((res) => res.data)
 
     products.value = response.products.data
@@ -24,6 +29,6 @@ export const useOffersStore = defineStore('offers', () => {
     products,
     currentPage,
     lastPage,
-    fetchOffers,
+    fetchSearchedProducts,
   }
 })

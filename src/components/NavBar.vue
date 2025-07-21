@@ -109,13 +109,14 @@
                       </li>
                     </ul>
                   </div>
-                  <form class="relative w-full">
+                  <form @submit.prevent="doSearch" class="relative w-full">
                     <input
                       type="search"
                       id="search-dropdown"
                       class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                       placeholder="Search for Products..."
                       required
+                      v-model="product"
                     />
                     <button
                       type="submit"
@@ -784,7 +785,7 @@
       </div>
     </div>
   </nav>
-  <Teleport to="body"><Spinner v-if="loading" /></Teleport>
+  <Teleport to="body"><Spinner v-if="logoutLoading" /></Teleport>
 </template>
 
 <script setup lang="ts">
@@ -794,16 +795,32 @@ import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useApiHandler } from '@/composables/useApiHandler'
 import Spinner from './Spinner.vue'
+import { ref } from 'vue'
+import { useSearchStore } from '@/features/products/store/searchStore'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 
-const { loading, execute } = useApiHandler(authStore.logout)
+const { loading: logoutLoading, execute: logout } = useApiHandler(
+  authStore.logout
+)
 
 async function doLogout() {
-  await execute()
+  await logout()
 }
 
 onMounted(() => initFlowbite())
+
+const searchStore = useSearchStore()
+const product = ref('')
+const router = useRouter()
+
+async function doSearch() {
+  router.push({
+    name: 'SearchProduct',
+    params: { product: product.value },
+  })
+}
 </script>
 
 <style scoped></style>

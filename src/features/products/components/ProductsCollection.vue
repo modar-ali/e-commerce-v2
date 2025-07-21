@@ -83,13 +83,14 @@ import ProductCard from '@/features/products/components/ProductCard.vue'
 import Alert from '@/components/Alert.vue'
 import type { Product } from '../types'
 import ProductCardSkeleton from '@/features/products/components/ProductCardSkeleton.vue'
+import { useRoute } from 'vue-router'
 
-const { products, cPage, lPage, fetchProducts } = defineProps<{
+const { title, products, cPage, lPage, fetchProducts } = defineProps<{
   title: string
   products: Product[]
   cPage: number
   lPage: number
-  fetchProducts: (page?: number) => Promise<{
+  fetchProducts: (payload?: { product?: string; page: number }) => Promise<{
     status: string | undefined
     message: string | null
   }>
@@ -100,13 +101,14 @@ const { loading, status, error, execute } = useApiHandler(fetchProducts)
 const page = ref(1)
 const currentPage = computed(() => cPage)
 const lastPage = computed(() => lPage)
+const route = useRoute()
 
 const { isFirstPage, isLastPage, prev, next } = usePagination({
   page,
   currentPage,
   lastPage,
   onPageChange: async () => {
-    await execute(page.value)
+    await execute({ product: route.params.product as string, page: page.value })
   },
 })
 </script>
