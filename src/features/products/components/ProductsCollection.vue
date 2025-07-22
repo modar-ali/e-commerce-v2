@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { useApiHandler } from '@/composables/useApiHandler'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { ref } from 'vue'
 import { usePagination } from '../composables/usePagination'
 import ProductCard from '@/features/products/components/ProductCard.vue'
@@ -87,10 +87,14 @@ import { useRoute } from 'vue-router'
 
 const { title, products, cPage, lPage, fetchProducts } = defineProps<{
   title: string
-  products: Product[]
+  products: Product[] | null
   cPage: number
   lPage: number
-  fetchProducts: (payload?: { product?: string; page: number }) => Promise<{
+  fetchProducts: (payload?: {
+    product?: string
+    categoryId?: number
+    page: number
+  }) => Promise<{
     status: string | undefined
     message: string | null
   }>
@@ -108,9 +112,23 @@ const { isFirstPage, isLastPage, prev, next } = usePagination({
   currentPage,
   lastPage,
   onPageChange: async () => {
-    await execute({ product: route.params.product as string, page: page.value })
+    await execute({
+      product: route.params.product as string,
+      categoryId: Number(route.params.id),
+      page: page.value,
+    })
   },
 })
+
+watch(
+  () => route.params.id,
+  async (newParam) => {
+    await execute({
+      categoryId: Number(newParam),
+      page: page.value,
+    })
+  }
+)
 </script>
 
 <style scoped></style>

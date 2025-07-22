@@ -2,9 +2,9 @@
   <ProductsCollection
     :title="$route.params.product as string"
     :products="searchStore.products"
-    :cPage="searchStore.currentPage"
-    :lPage="searchStore.lastPage"
-    :fetchProducts="searchStore.fetchSearchedProducts"
+    :c-page="searchStore.currentPage"
+    :l-page="searchStore.lastPage"
+    :fetch-products="searchStore.fetchSearchedProducts"
   />
 </template>
 

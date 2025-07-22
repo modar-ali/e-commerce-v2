@@ -2,9 +2,9 @@
   <ProductsCollection
     title="Offers"
     :products="offersStore.products"
-    :cPage="offersStore.currentPage"
-    :lPage="offersStore.lastPage"
-    :fetchProducts="offersStore.fetchOffers"
+    :c-page="offersStore.currentPage"
+    :l-page="offersStore.lastPage"
+    :fetch-products="offersStore.fetchOffers"
   />
 </template>
 

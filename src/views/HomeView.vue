@@ -5,9 +5,9 @@
     <ProductsCollection
       title="Trendy Products"
       :products="trendyProductsStore.products"
-      :cPage="trendyProductsStore.currentPage"
-      :lPage="trendyProductsStore.lastPage"
-      :fetchProducts="trendyProductsStore.fetchTrendyProducts"
+      :c-page="trendyProductsStore.currentPage"
+      :l-page="trendyProductsStore.lastPage"
+      :fetch-products="trendyProductsStore.fetchTrendyProducts"
     />
   </section>
 </template>

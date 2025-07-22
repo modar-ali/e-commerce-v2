@@ -67,6 +67,12 @@ const router = createRouter({
       component: () => import('../views/SearchProductView.vue'),
       meta: { layout: 'default' },
     },
+    {
+      path: '/category/:id',
+      name: 'CategoryProducts',
+      component: () => import('../views/CategoryProductsView.vue'),
+      meta: { layout: 'default' },
+    },
   ],
 })
 

@@ -75,39 +75,7 @@
                     id="dropdownNavbarLg"
                     class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
                   >
-                    <ul
-                      class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                      aria-labelledby="dropdownDefaultButton"
-                    >
-                      <li>
-                        <a
-                          href="#"
-                          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >Bedrooms</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >living rooms</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >Kitchens</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >Bathrooms</a
-                        >
-                      </li>
-                    </ul>
+                    <Categories />
                   </div>
                   <form @submit.prevent="doSearch" class="relative w-full">
                     <input
@@ -714,39 +682,7 @@
                   id="dropdownNavbarSm"
                   class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
                 >
-                  <ul
-                    class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdownDefaultButton"
-                  >
-                    <li>
-                      <a
-                        href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Bedrooms</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >living rooms</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Kitchens</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Bathrooms</a
-                      >
-                    </li>
-                  </ul>
+                  <Categories />
                 </div>
                 <form class="relative w-full">
                   <input
@@ -796,8 +732,8 @@ import { initFlowbite } from 'flowbite'
 import { useApiHandler } from '@/composables/useApiHandler'
 import Spinner from './Spinner.vue'
 import { ref } from 'vue'
-import { useSearchStore } from '@/features/products/store/searchStore'
 import { useRouter } from 'vue-router'
+import Categories from '@/features/categories/components/Categories.vue'
 
 const authStore = useAuthStore()
 
@@ -811,7 +747,6 @@ async function doLogout() {
 
 onMounted(() => initFlowbite())
 
-const searchStore = useSearchStore()
 const product = ref('')
 const router = useRouter()
 
