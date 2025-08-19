@@ -77,8 +77,9 @@
         </p>
 
         <button
+          @click="addToCart"
           type="button"
-          class="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 sm:p-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          class="inline-flex items-center rounded-lg cursor-pointer bg-primary-700 px-5 py-2.5 sm:p-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         >
           <svg
             class="-ms-2 me-2 sm:m-0 h-5 w-5"
@@ -102,10 +103,22 @@
       </div>
     </div>
   </div>
+  <Teleport to="body"
+    ><Alert
+      :status="status"
+      error="You should login first"
+      :duration="5000"
+    ></Alert
+  ></Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { useCartStore } from '@/features/cart/store/cartStore'
+import { computed, type ComputedRef } from 'vue'
+import Alert from '@/components/Alert.vue'
+import { useAuthStore } from '@/features/auth/store/authStore'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const {
   id: productId,
@@ -118,7 +131,7 @@ const {
   name: string
   details: string
   material: string
-  colors: Record<string, string> // it should be Record<string, string>
+  colors: Record<string, string>
   dimensions: string
   image: string
   is_trendy: number
@@ -132,6 +145,30 @@ const {
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const imgUrl = computed(() => baseUrl + image)
+
+const cartStore = useCartStore()
+
+const authStore = useAuthStore()
+
+const router = useRouter()
+
+const status = ref<'failed' | null>(null)
+
+function addToCart() {
+  if (!authStore.isLoggedIn) {
+    status.value = 'failed'
+    setTimeout(() => {
+      status.value = null
+    }, 5000)
+    return
+  }
+  cartStore.addToCart({
+    productId: productId,
+    name: name,
+    price: Number(price),
+    discount: Number(discount),
+  })
+}
 </script>
 
 <style scoped></style>

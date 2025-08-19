@@ -91,8 +91,8 @@
               </div>
               <div data-popper-arrow></div>
             </div>
-            <a
-              href="#"
+            <button
+              @click="addToCart"
               title=""
               class="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
               role="button"
@@ -115,7 +115,7 @@
                 />
               </svg>
               Add to cart
-            </a>
+            </button>
           </div>
 
           <hr class="my-3 md:my-4 border-gray-200 dark:border-gray-800" />
@@ -157,6 +157,7 @@ import RatingDisplay from '@/features/products/components/RatingDisplay.vue'
 import { initPopovers } from 'flowbite'
 import StarRating from '@/features/products/components/StarRating.vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
+import { useCartStore } from '@/features/cart/store/cartStore'
 
 const productOverviewStore = useProductOverviewStore()
 const route = useRoute()
@@ -189,6 +190,17 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL
 const imgUrl = computed(() => baseUrl + productOverviewStore.product?.image)
 
 const authStore = useAuthStore()
+
+const cartStore = useCartStore()
+
+function addToCart() {
+  cartStore.addToCart({
+    productId: productOverviewStore.product?.id as number,
+    name: productOverviewStore.product?.name as string,
+    price: Number(productOverviewStore.product?.price),
+    discount: Number(productOverviewStore.product?.id),
+  })
+}
 </script>
 
 <style scoped></style>
