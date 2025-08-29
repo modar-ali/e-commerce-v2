@@ -39,11 +39,11 @@
         </button>
       </div>
     </div>
-    <div v-for="item of cartStore.items" :key="item.productId">
+    <div v-for="item of cartStore.items" :key="item.product_id">
       <div class="grid grid-cols-2">
         <div>
           <RouterLink
-            :to="{ name: 'ProductOverview', params: { id: item.productId } }"
+            :to="{ name: 'ProductOverview', params: { id: item.product_id } }"
             class="truncate block text-sm w-36 break-words font-semibold leading-none text-gray-900 dark:text-white hover:underline"
             >{{ item.name }}</RouterLink
           >
@@ -62,7 +62,7 @@
           </p>
 
           <button
-            @click="cartStore.removeFromCart(item.productId)"
+            @click="cartStore.removeFromCart(item.product_id)"
             data-tooltip-target="tooltipRemoveItem4b"
             type="button"
             class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600"
@@ -94,7 +94,7 @@
       </div>
       <div class="flex items-center justify-center mt-2.5">
         <button
-          @click="cartStore.decreaseQuantity(item.productId)"
+          @click="cartStore.decreaseQuantity(item.product_id)"
           type="button"
           id="decrement-button"
           data-input-counter-decrement="counter-input"
@@ -121,7 +121,7 @@
           >{{ item.quantity }}</span
         >
         <button
-          @click="cartStore.increaseQuantity(item.productId)"
+          @click="cartStore.increaseQuantity(item.product_id)"
           type="button"
           id="increment-button"
           data-input-counter-increment="counter-input"
@@ -146,15 +146,14 @@
       </div>
     </div>
 
-    <a
+    <button
+      @click="$router.push({ name: 'Checkout' })"
       v-show="cartStore.items.length"
-      href="#"
-      title=""
       class="mb-2 me-2 inline-flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       role="button"
     >
       Proceed to Checkout
-    </a>
+    </button>
   </div>
 </template>
 
@@ -162,13 +161,10 @@
 import { useAuthStore } from '@/features/auth/store/authStore'
 import { useCartStore } from '../store/cartStore'
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
 
 const authStore = useAuthStore()
 
 const cartStore = useCartStore()
-
-const quantity = ref(0)
 </script>
 
 <style scoped></style>

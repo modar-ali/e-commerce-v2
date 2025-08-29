@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid place-items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-screen max-h-full bg-gray-900/80 bg-opacity"
+    class="grid place-items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-screen max-h-full bg-gray-900/90 bg-opacity"
   >
     <div
       class="flex items-center justify-center gap-3 max-w-sm p-6 bg-white border border-gray-100 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"

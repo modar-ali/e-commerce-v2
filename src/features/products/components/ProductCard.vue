@@ -117,7 +117,6 @@ import { useCartStore } from '@/features/cart/store/cartStore'
 import { computed, type ComputedRef } from 'vue'
 import Alert from '@/components/Alert.vue'
 import { useAuthStore } from '@/features/auth/store/authStore'
-import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 
 const {
@@ -150,8 +149,6 @@ const cartStore = useCartStore()
 
 const authStore = useAuthStore()
 
-const router = useRouter()
-
 const status = ref<'failed' | null>(null)
 
 function addToCart() {
@@ -163,7 +160,7 @@ function addToCart() {
     return
   }
   cartStore.addToCart({
-    productId: productId,
+    product_id: productId,
     name: name,
     price: Number(price),
     discount: Number(discount),

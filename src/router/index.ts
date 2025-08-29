@@ -5,7 +5,11 @@ import { useAuthStore } from '@/features/auth/store/authStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => '../views/NotFoundView.vue' },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => '../views/NotFoundView.vue',
+    },
     {
       path: '/',
       name: 'Home',
@@ -72,6 +76,18 @@ const router = createRouter({
       name: 'CategoryProducts',
       component: () => import('../views/CategoryProductsView.vue'),
       meta: { layout: 'default' },
+    },
+    {
+      path: '/checkout',
+      name: 'Checkout',
+      component: () => import('../views/Checkout.vue'),
+      meta: { layout: 'default' },
+    },
+    {
+      path: '/orders-overview',
+      name: 'OrdersOverview',
+      component: () => import('../views/OrdersOverview.vue'),
+      meta: { layout: 'default', requiresAuth: true },
     },
   ],
 })

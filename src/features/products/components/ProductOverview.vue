@@ -195,7 +195,7 @@ const cartStore = useCartStore()
 
 function addToCart() {
   cartStore.addToCart({
-    productId: productOverviewStore.product?.id as number,
+    product_id: productOverviewStore.product?.id as number,
     name: productOverviewStore.product?.name as string,
     price: Number(productOverviewStore.product?.price),
     discount: Number(productOverviewStore.product?.id),

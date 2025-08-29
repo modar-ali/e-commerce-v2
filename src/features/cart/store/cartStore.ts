@@ -3,7 +3,7 @@ import { useStorage } from '@vueuse/core'
 import { computed } from 'vue'
 
 export interface CartItem {
-  productId: number
+  product_id: number
   name: string
   price: number
   discount?: number
@@ -23,7 +23,7 @@ export const useCartStore = defineStore('cart', () => {
 
   // Add or increment quantity
   function addToCart(item: Omit<CartItem, 'quantity'>) {
-    const existing = items.value.find((i) => i.productId === item.productId)
+    const existing = items.value.find((i) => i.product_id === item.product_id)
     if (existing) {
       existing.quantity++
     } else {
@@ -32,16 +32,16 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   // Remove item permanently
-  function removeFromCart(productId: number) {
-    const idx = items.value.findIndex((i) => i.productId === productId)
+  function removeFromCart(product_id: number) {
+    const idx = items.value.findIndex((i) => i.product_id === product_id)
     if (idx !== -1) {
       items.value.splice(idx, 1)
     }
   }
 
   // Decrease quantity by one, but keep item if quantity > 1
-  function decreaseQuantity(productId: number) {
-    const item = items.value.find((i) => i.productId === productId)
+  function decreaseQuantity(product_id: number) {
+    const item = items.value.find((i) => i.product_id === product_id)
     if (item) {
       if (item.quantity > 1) {
         item.quantity--
@@ -50,8 +50,8 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   // Increase quantity by one
-  function increaseQuantity(productId: number) {
-    const item = items.value.find((i) => i.productId === productId)
+  function increaseQuantity(product_id: number) {
+    const item = items.value.find((i) => i.product_id === product_id)
     if (item) {
       item.quantity++
     }
